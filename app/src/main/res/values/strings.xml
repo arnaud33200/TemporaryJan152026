@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SimpleEchoApp</string>
+
+    <!-- UI Strings -->
+    <string name="screen_title">Text Echo App</string>
+    <string name="input_label">Enter text</string>
+    <string name="input_placeholder">Type something…</string>
+    <string name="clear_text">Clear text</string>
+    <string name="submit_button">Submit</string>
+    <string name="success_title">Success!</string>
+    <string name="echoed_text_label">Echoed text:</string>
+    <string name="error_title">Error</string>
+
+    <!-- Validation Messages -->
+    <string name="error_text_empty">Text cannot be empty</string>
+    <string name="error_unknown_validation">Unknown validation error occurred</string>
+    <string name="error_unexpected">An unexpected error occurred: %1$s</string>
+
+    <!-- Server Error Messages -->
+    <string name="error_server_invalid_content">Server validation failed: Invalid content detected</string>
+    <string name="error_network">Network error: Unable to reach validation server</string>
+    <string name="error_server_unavailable">Server error: Validation service temporarily unavailable</string>
+    <string name="error_validation_failed">Validation failed: Please try again</string>
+</resources>
