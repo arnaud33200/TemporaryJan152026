@@ -11,13 +11,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joist.textecho.analytics.AnalyticsTracker
 import com.joist.textecho.ui.screen.TextEchoScreen
 import com.joist.textecho.ui.theme.TextEchoTheme
 import com.joist.textecho.ui.viewmodel.TextEchoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var analyticsTracker: AnalyticsTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,6 +38,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     TextEchoScreen(
                         state = state,
+                        analyticsTracker = analyticsTracker,
                         onClear = viewModel::onClear,
                         onSubmit = viewModel::onSubmit,
                         onTextChanged = viewModel::onTextChanged

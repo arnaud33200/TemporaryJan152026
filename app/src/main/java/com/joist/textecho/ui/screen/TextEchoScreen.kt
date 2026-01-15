@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joist.textecho.R
+import com.joist.textecho.analytics.AnalyticsEvents
+import com.joist.textecho.analytics.AnalyticsTracker
 import com.joist.textecho.ui.mapper.toErrorMessage
 import com.joist.textecho.ui.state.TextEchoState
 
@@ -43,6 +45,7 @@ import com.joist.textecho.ui.state.TextEchoState
 @Composable
 fun TextEchoScreen(
     state: TextEchoState,
+    analyticsTracker: AnalyticsTracker? = null,
     onClear: () -> Unit = {},
     onSubmit: () -> Unit = {},
     onTextChanged: (String) -> Unit = {}
@@ -55,6 +58,11 @@ fun TextEchoScreen(
         errorMessage?.let {
             snackBarHostState.showSnackbar(it)
         }
+    }
+
+    // Track screen view
+    LaunchedEffect(Unit) {
+        analyticsTracker!!.trackScreenView(AnalyticsEvents.SCREEN_TEXT_ECHO)
     }
 
     Scaffold(
