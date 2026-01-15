@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Text Echo</string>
+    <string name="title">Text Echo</string>
+    <string name="enter_a_text_to_validate">Enter text to validate with server</string>
+    <string name="enter_a_text_label">Enter text</string>
+    <string name="type_something_hint">\"Type something...\"</string>
+    <string name="minimun_3_characters">\"Minimum 3 characters required\"</string>
+    <string name="clear">Clear</string>
+    <string name="submit">Submit</string>
+    <string name="validating">Validating...</string>
+    <string name="please_enter_some_text">Please enter some text</string>
+    <string name="text_must_be_at_least_characters_long">Text must be at least %1$d characters long</string>
+    <string name="network_error_please_check_your_connection_and_try_again">Network error. Please check your connection and try again</string>
+    <string name="validation_failed">Validation failed: %1$s</string>
+    <string name="an_error_occurred">An error occurred: %1$s</string>
+</resources>
