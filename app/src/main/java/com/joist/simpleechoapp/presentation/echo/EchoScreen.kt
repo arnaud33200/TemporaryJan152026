@@ -26,14 +26,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.joist.simpleechoapp.R
+import com.joist.simpleechoapp.analytics.AnalyticsEvents
+import com.joist.simpleechoapp.di.AppModule
 
 /**
  * Main screen for the Text Echo application.
@@ -49,6 +54,25 @@ fun EchoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val inputText by viewModel.inputText.collectAsState()
+
+    val isButtonEnabled = remember {
+        derivedStateOf {
+            uiState !is EchoUiState.Loading && inputText.isNotBlank()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        // Track screen view once when screen is first composed
+        // This is efficient as LaunchedEffect(Unit) only runs once
+        AppModule.provideAnalyticsTracker().trackScreenView(AnalyticsEvents.SCREEN_ECHO)
+    }
+
+    // Update user property on every text change for better analytics accuracy
+    LaunchedEffect(inputText) {
+        if (inputText.isNotEmpty()) {
+            AppModule.provideAnalyticsTracker().setUserProperty("last_input_length", inputText.length.toString())
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -82,7 +106,17 @@ fun EchoScreen(
                 maxLines = 5,
                 trailingIcon = {
                     if (inputText.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.onInputTextChanged("") }) {
+                        IconButton(onClick = {
+                            val analytics = AppModule.provideAnalyticsTracker()
+                            analytics.trackEvent(
+                                "input_cleared",
+                                mapOf(
+                                    AnalyticsEvents.PROP_TEXT_LENGTH to inputText.length,
+                                    AnalyticsEvents.PROP_TIMESTAMP to System.currentTimeMillis()
+                                )
+                            )
+                            viewModel.onInputTextChanged("")
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = stringResource(R.string.clear_text)
@@ -96,7 +130,7 @@ fun EchoScreen(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = viewModel::onSubmitClicked,
-                enabled = uiState !is EchoUiState.Loading && inputText.isNotBlank()
+                enabled = isButtonEnabled.value
             ) {
                 if (uiState is EchoUiState.Loading) {
                     CircularProgressIndicator(

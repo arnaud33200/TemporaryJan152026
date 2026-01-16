@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Initialize dependency injection container
+        // Analytics tracker will be initialized lazily when first accessed
         com.joist.simpleechoapp.di.AppModule.init(applicationContext)
 
         enableEdgeToEdge()
