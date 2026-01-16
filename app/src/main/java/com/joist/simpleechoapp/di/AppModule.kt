@@ -1,6 +1,8 @@
 package com.joist.simpleechoapp.di
 
 import android.content.Context
+import com.joist.simpleechoapp.analytics.AnalyticsTracker
+import com.joist.simpleechoapp.analytics.DefaultAnalyticsTracker
 import com.joist.simpleechoapp.data.remote.ValidationService
 import com.joist.simpleechoapp.data.repository.TextValidationRepositoryImpl
 import com.joist.simpleechoapp.data.util.AndroidStringProvider
@@ -39,6 +41,14 @@ object AppModule {
     }
 
     /**
+     * Provides the analytics tracker instance.
+     * Tracks user events for analytics and monitoring.
+     */
+    private val analyticsTracker: AnalyticsTracker by lazy {
+        DefaultAnalyticsTracker()
+    }
+
+    /**
      * Provides the text validation repository implementation.
      * Abstracts data source from domain layer.
      */
@@ -55,10 +65,17 @@ object AppModule {
     }
 
     /**
+     * Provides the analytics tracker for tracking user events.
+     */
+    fun provideAnalyticsTracker(): AnalyticsTracker {
+        return analyticsTracker
+    }
+
+    /**
      * Provides a new instance of EchoViewModel.
      * Note: In production, use ViewModelProvider.Factory for proper lifecycle handling.
      */
     fun provideEchoViewModel(): EchoViewModel {
-        return EchoViewModel(validateTextUseCase)
+        return EchoViewModel(validateTextUseCase, analyticsTracker)
     }
 }
